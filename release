@@ -2,9 +2,7 @@ version = "0.1.0"
 release_name = "socorta"
 description = """
 ### Docker Image Release
-
 ## Socotra Testnet v1 Juneo Network
-
 Command to pull the image:
 `docker pull ghcr.io/staketab/juneo-docker/socorta:0.1.0`
 """
