@@ -9,8 +9,8 @@ services:
       - "9650:9650"
       - "9651:9651"
     volumes:
-      - /root/.juneogo:/root/.juneogo
-      - /root/.juneogo/plugins:/root/.juneogo/plugins
+      - /root/juneogo:/root/juneogo
+      - /root/juneogo/plugins:/root/juneogo/plugins
     command:
       [
         "/usr/bin/juneogo",
