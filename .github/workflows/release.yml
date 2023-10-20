@@ -12,41 +12,42 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Get release info
-        id: get_info
+      - name: Set up Git environment
         run: |
-          echo "::set-output name=image_name::$(grep 'image_name:' release | cut -d':' -f2)"
-          echo "::set-output name=version::$(cat release | grep version | cut -d= -f2)"
-          echo "::set-output name=description::$(awk '/description=/{flag=1; next} /another-marker=/{flag=0} flag' release)"
+          git config --local user.email "support@staketab.com"
+          git config --local user.name "Staketab"
 
-      - name: Setup GitHub CLI
+      - name: Set Release Variables
+        id: env_vars
         run: |
-          sudo apt-get install -y gh
+          version=$(grep -oE 'version\s+=\s+"([^"]+)"' ./release | awk -F'"' '{print $2}')
+          image_name=$(grep -oE 'release_name\s+=\s+"([^"]+)"' ./release | awk -F'"' '{print $2}')
+          description=$(grep -oE 'description\s+=\s+"([^"]+)"' ./release | awk -F'"' '{print $2}')
+          echo "TAG_NAME=$tag_name" >> $GITHUB_ENV
+          echo "RELEASE_NAME=$image_name" >> $GITHUB_ENV
+          echo "RELEASE_BODY=$description" >> $GITHUB_ENV
 
-      - name: Authenticate with GitHub CLI
-        run: echo "${{ secrets.GIT_TOKEN }}" | gh auth login --with-token
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
+        with:
+          tag_name: ${{ env.TAG_NAME }}
+          release_name: ${{ env.RELEASE_NAME }}
+          body: ${{ env.RELEASE_BODY }}
 
-      - name: Check if tag exists
-        id: check_tag
-        continue-on-error: true
+      - name: Upload Release Asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./build/suid
+          asset_name: suid
+          asset_content_type: application/octet-stream
+
+      - name: Create Tag
         run: |
-          if gh release view ${{ steps.get_info.outputs.version }}; then
-            echo "Tag already exists"
-          else
-            echo "::set-output name=tag_exists::false"
-          fi
-
-      - name: Create new tag if it doesn't exist
-        if: steps.check_tag.outputs.tag_exists != 'false'
-        run: |
-          git tag ${{ steps.get_info.outputs.version }}
-          git push origin ${{ steps.get_info.outputs.version }}
-
-      - name: Create GitHub Release
-        run: |
-          gh release create ${{ steps.get_info.outputs.version }} \
-            --title "Release ${{ steps.get_info.outputs.version }}" \
-            --notes "${{ steps.get_info.outputs.description }}" \
-            --repo ${{ github.repository }} \
-            --draft=false \
-            --prerelease=false
+          git tag ${{ env.TAG_NAME }}
+          git push origin ${{ env.TAG_NAME }}
