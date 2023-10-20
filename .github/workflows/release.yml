@@ -26,6 +26,22 @@ jobs:
       - name: Authenticate with GitHub CLI
         run: echo "${{ secrets.GIT_TOKEN }}" | gh auth login --with-token
 
+      - name: Check if tag exists
+        id: check_tag
+        continue-on-error: true
+        run: |
+          if gh release view ${{ steps.get_info.outputs.version }}; then
+            echo "Tag already exists"
+          else
+            echo "::set-output name=tag_exists::false"
+          fi
+
+      - name: Create new tag if it doesn't exist
+        if: steps.check_tag.outputs.tag_exists != 'false'
+        run: |
+          git tag ${{ steps.get_info.outputs.version }}
+          git push origin ${{ steps.get_info.outputs.version }}
+
       - name: Create GitHub Release
         run: |
           gh release create ${{ steps.get_info.outputs.version }} \
