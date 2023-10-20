@@ -23,7 +23,7 @@ jobs:
           version=$(grep -oE 'version\s+=\s+"([^"]+)"' ./release | awk -F'"' '{print $2}')
           image_name=$(grep -oE 'release_name\s+=\s+"([^"]+)"' ./release | awk -F'"' '{print $2}')
           description=$(grep -oE 'description\s+=\s+"([^"]+)"' ./release | awk -F'"' '{print $2}')
-          echo "TAG_NAME=$tag_name" >> $GITHUB_ENV
+          echo "TAG_NAME=$version" >> $GITHUB_ENV
           echo "RELEASE_NAME=$image_name" >> $GITHUB_ENV
           echo "RELEASE_BODY=$description" >> $GITHUB_ENV
 
