@@ -10,7 +10,7 @@ services:
       - "9651:9651"
     volumes:
       - /root/.juneogo:/root/.juneogo
-    command: ["/juneogo-binaries/juneogo", "--http-host", "0.0.0.0", "--http-port", "9650"]
+    command: ["./juneogo-binaries/juneogo", "--http-host", "0.0.0.0", "--http-port", "9650"]
     networks:
       - juneo
 
