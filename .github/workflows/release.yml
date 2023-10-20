@@ -19,12 +19,18 @@ jobs:
           echo "::set-output name=version::$(cat release | grep version | cut -d= -f2)"
           echo "::set-output name=description::$(awk '/description=/{flag=1; next} /another-marker=/{flag=0} flag' release)"
 
+      - name: Setup GitHub CLI
+        run: |
+          sudo apt-get install -y gh
+
+      - name: Authenticate with GitHub CLI
+        run: echo "${{ secrets.GIT_TOKEN }}" | gh auth login --with-token
+
       - name: Create GitHub Release
-        uses: gh-actions/gh-release@v1
-        with:
-          tag_name: ${{ steps.get_info.outputs.version }}
-          release_name: Release ${{ steps.get_info.outputs.version }}
-          body: ${{ steps.get_info.outputs.description }}
-          draft: false
-          prerelease: false
-          token: ${{ secrets.GIT_TOKEN }}
+        run: |
+          gh release create ${{ steps.get_info.outputs.version }} \
+            --title "Release ${{ steps.get_info.outputs.version }}" \
+            --notes "${{ steps.get_info.outputs.description }}" \
+            --repo ${{ github.repository }} \
+            --draft=false \
+            --prerelease=false
