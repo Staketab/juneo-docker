@@ -11,6 +11,7 @@ services:
       - "0.0.0.0:9555:8555"
     volumes:
       - /root/.juneogo:/root/.juneogo
+      - /root/.juneogo/plugins:/root/.juneogo/plugins
     command:
       [
         "/usr/bin/juneogo",
