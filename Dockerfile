@@ -6,9 +6,10 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 #RUN git clone https://github.com/Juneo-io/juneogo-binaries.git
-RUN wget https://github.com/Juneo-io/juneogo-binaries/raw/main/juneogo && ls -l
-RUN wget https://github.com/Juneo-io/juneogo-binaries/raw/main/plugins/jevm && ls -l
-RUN wget https://github.com/Juneo-io/juneogo-binaries/raw/main/plugins/srEr2XGGtowDVNQ6YgXcdUb16FGknssLTGUFYg7iMqESJ4h8e && ls -l
+RUN wget https://github.com/Juneo-io/juneogo-binaries/raw/main/juneogo && \
+    wget https://github.com/Juneo-io/juneogo-binaries/raw/main/plugins/jevm && \
+    wget https://github.com/Juneo-io/juneogo-binaries/raw/main/plugins/srEr2XGGtowDVNQ6YgXcdUb16FGknssLTGUFYg7iMqESJ4h8e && \
+    ls -la
     
 RUN mkdir -p /root/.juneogo/plugins
 
