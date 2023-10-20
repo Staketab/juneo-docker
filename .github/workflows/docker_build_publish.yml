@@ -16,8 +16,8 @@ jobs:
     - name: Get image name and version from release file
       id: get_info
       run: |
-        echo "::set-output name=image_name::$(grep 'image_name = ' release | cut -d':' -f2)"
-        echo "::set-output name=version::$(grep 'version = ' release | cut -d':' -f2)"
+        echo "::set-output name=image_name::$(grep 'image_name =' release | cut -d'=' -f2 | tr -d ' \"')"
+        echo "::set-output name=version::$(grep 'version =' release | cut -d'=' -f2 | tr -d ' \"')"
 
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v1
