@@ -7,15 +7,10 @@ RUN apt-get update && apt-get install -y \
 
 WORKDIR /root
 
-RUN mkdir -p ./juneogo/plugins
-
-RUN git clone https://github.com/Juneo-io/juneogo-binaries.git && \
-    cp -r juneogo-binaries/juneogo /usr/bin/juneogo && \
-    ls juneogo-binaries/plugins/ && \
-    cp -r juneogo-binaries/plugins/* ./juneogo/plugins/
-
-RUN chmod +x /usr/bin/juneogo ./juneogo/plugins/jevm ./juneogo/plugins/srEr2XGGtowDVNQ6YgXcdUb16FGknssLTGUFYg7iMqESJ4h8e
-RUN ls -a ./juneogo/plugins/
+RUN git clone https://github.com/Juneo-io/juneogo-binaries.git
+RUN ls -a juneogo-binaries
+RUN ls -a juneogo-binaries/plugins
+RUN chmod +x juneogo-binaries/juneogo juneogo-binaries/plugins/jevm juneogo-binaries/plugins/srEr2XGGtowDVNQ6YgXcdUb16FGknssLTGUFYg7iMqESJ4h8e
 
 EXPOSE 9650 9651
 

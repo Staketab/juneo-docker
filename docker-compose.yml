@@ -9,14 +9,12 @@ services:
       - "9650:9650"
       - "9651:9651"
     volumes:
-      - /root/juneogo:/root/juneogo
-      - /root/juneogo/plugins:/root/juneogo/plugins
-    command:
-      [
-        "/usr/bin/juneogo",
-        "--http-host=0.0.0.0",
-        "--http-port=9650"
-      ]
+      - /root/.juneogo:/root/.juneogo
+      - /root/.juneogo/plugins:/root/juneogo-binaries/plugins
+    command: >
+      /usr/bin/juneogo
+        --http-host=0.0.0.0
+        --http-port=9650
     networks:
       - juneo
 
