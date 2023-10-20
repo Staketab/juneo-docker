@@ -1,9 +1,3 @@
 version = "0.1.0"
 image_name = "socorta"
-description = "## Docker release Socotra Testnet v1
-
-Docker image release for Socotra Testnet v1 Juneo Network.
-
-\```
-docker pull ghcr.io/staketab/juneo-docker/socorta:0.1.0
-\```"
+description = "Docker image release for Socotra Testnet v1 Juneo Network. docker pull ghcr.io/staketab/juneo-docker/socorta:0.1.0"
