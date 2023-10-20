@@ -1,0 +1,30 @@
+name: Create Release
+
+on:
+  push:
+    branches:
+      - socorta
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Get release info
+        id: get_info
+        run: |
+          echo "::set-output name=image_name::$(grep 'image_name:' release | cut -d':' -f2)"
+          echo "::set-output name=version::$(cat release | grep version | cut -d= -f2)"
+          echo "::set-output name=description::$(awk '/description=/{flag=1; next} /another-marker=/{flag=0} flag' release)"
+
+      - name: Create GitHub Release
+        uses: gh-actions/gh-release@v1
+        with:
+          tag_name: ${{ steps.get_info.outputs.version }}
+          release_name: Release ${{ steps.get_info.outputs.version }}
+          body: ${{ steps.get_info.outputs.description }}
+          draft: false
+          prerelease: false
+          token: ${{ secrets.GIT_TOKEN }}

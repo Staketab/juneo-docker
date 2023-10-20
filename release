@@ -1,2 +1,10 @@
+version:0.1.0
 image_name:socorta
-version:1.0.0
+description=
+## Docker release Socotra Testnet v1
+
+Docker image release for Socotra Testnet v1 Juneo Network.
+
+\```
+docker pull ghcr.io/staketab/juneo-docker/socorta:0.1.0
+\```
