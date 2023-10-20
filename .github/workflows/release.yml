@@ -23,9 +23,9 @@ jobs:
           version=$(grep -oE 'version\s+=\s+"([^"]+)"' ./release | awk -F'"' '{print $2}')
           release_name=$(grep -oE 'release_name\s+=\s+"([^"]+)"' ./release | awk -F'"' '{print $2}')
           description=$(awk -F'= ' '/description/ {getline; while ($0 !~ /^"""/) {print $0; getline}}' ./release)
-          echo "TAG_NAME=$version" >> $GITHUB_ENV
-          echo "RELEASE_NAME=$release_name" >> $GITHUB_ENV
-          echo "RELEASE_BODY=$description" >> $GITHUB_ENV
+          echo "::set-output name=TAG_NAME::$version"
+          echo "::set-output name=RELEASE_NAME::$release_name"
+          echo "::set-output name=RELEASE_BODY::$description"
 
       - name: Create Release
         id: create_release
@@ -33,11 +33,11 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
         with:
-          tag_name: ${{ env.TAG_NAME }}
-          release_name: ${{ env.RELEASE_NAME }}_${{ env.TAG_NAME }}
-          body: ${{ env.RELEASE_BODY }}
+          tag_name: ${{ steps.env_vars.outputs.TAG_NAME }}
+          release_name: ${{ steps.env_vars.outputs.RELEASE_NAME }}_${{ steps.env_vars.outputs.TAG_NAME }}
+          body: ${{ steps.env_vars.outputs.RELEASE_BODY }}
 
       - name: Create Tag
         run: |
-          git tag ${{ env.TAG_NAME }}
-          git push origin ${{ env.TAG_NAME }}
+          git tag ${{ steps.env_vars.outputs.TAG_NAME }}
+          git push origin ${{ steps.env_vars.outputs.TAG_NAME }}
