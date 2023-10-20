@@ -1,0 +1,21 @@
+version: '3.3'
+
+services:
+  juneogo:
+    image: ghcr.io/staketab/juneo-docker/socorta:1.0.0
+    container_name: juneo
+    ports:
+      - "9651:9651"
+      - "0.0.0.0:9555:8555"
+    volumes:
+      - /root/.juneogo:/root/.juneogo
+    command: >
+      /usr/bin/juneogo
+        --http-host 0.0.0.0
+        --http-port 8555
+    networks:
+      - juneo
+
+networks:
+  juneo:
+    driver: bridge

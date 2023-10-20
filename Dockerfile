@@ -14,5 +14,7 @@ RUN git clone https://github.com/Juneo-io/juneogo-binaries.git && \
 
 RUN chmod +x /usr/bin/juneogo /root/.juneogo/plugins/jevm /root/.juneogo/plugins/srEr2XGGtowDVNQ6YgXcdUb16FGknssLTGUFYg7iMqESJ4h8e
 
+EXPOSE 9650 9651 8555
+
 ENTRYPOINT ["/bin/bash", "-c"]
 CMD []
