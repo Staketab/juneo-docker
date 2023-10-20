@@ -37,16 +37,6 @@ jobs:
           release_name: ${{ env.RELEASE_NAME }}
           body: ${{ env.RELEASE_BODY }}
 
-      - name: Upload Release Asset
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./build/suid
-          asset_name: suid
-          asset_content_type: application/octet-stream
-
       - name: Create Tag
         run: |
           git tag ${{ env.TAG_NAME }}
