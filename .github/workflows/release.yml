@@ -23,7 +23,7 @@ jobs:
           version=$(grep -oE 'version\s+=\s+"([^"]+)"' ./release | awk -F'"' '{print $2}')
           release_name=$(grep -oE 'release_name\s+=\s+"([^"]+)"' ./release | awk -F'"' '{print $2}')
           description=$(awk '/description = """$/,/"""/{if (!/description = """/ && !/"""/) print}' ./release)
-          echo "$description
+          echo "$description"
           echo "::set-output name=TAG_NAME::$version"
           echo "::set-output name=RELEASE_NAME::$release_name"
           echo "::set-output name=RELEASE_BODY::$description"
